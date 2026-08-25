@@ -21,9 +21,12 @@ function App() {
 
           <div className="relative z-10 p-8 space-y-8">
             <div className="flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white">
+              <button
+                onClick={() => setCurrentStep(1)}
+                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+              >
                 1
-              </div>
+              </button>
               <div>
                 <p className="text-white text-xs">STEP 1</p>
                 <p className="text-sm font-bold text-white">YOUR INFO</p>
@@ -31,9 +34,12 @@ function App() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white">
+              <button
+                onClick={() => setCurrentStep(2)}
+                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+              >
                 2
-              </div>
+              </button>
               <div>
                 <p className="text-white text-xs">STEP 2</p>
                 <p className="text-sm font-bold text-white">SELECT PLAN</p>
@@ -41,9 +47,12 @@ function App() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white">
+              <button
+                onClick={() => setCurrentStep(3)}
+                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+              >
                 3
-              </div>
+              </button>
               <div>
                 <p className="text-white text-xs">STEP 3</p>
                 <p className="text-sm font-bold text-white">ADD-ONS</p>
@@ -51,9 +60,12 @@ function App() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white">
+              <button
+                onClick={() => setCurrentStep(4)}
+                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+              >
                 4
-              </div>
+              </button>
               <div>
                 <p className="text-white text-xs">STEP 4</p>
                 <p className="text-sm font-bold text-white">SUMMARY</p>
@@ -69,10 +81,10 @@ function App() {
           {currentStep === 4 && <FinishingUp />}
 
           <button
-            onClick={() => setCurrentStep(2)}
+            onClick={() => setCurrentStep(currentStep+1)}
             className="mt-8 bg-blue-900 text-white px-5 py-3 rounded-lg"
           >
-            Test Step 2
+            Confirm
           </button>
         </section>
       </div>
