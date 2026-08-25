@@ -1,9 +1,10 @@
-function finishingUps(){
-    return(
-        <div>
-            <h1>Finishing Up</h1>
-            <p>Double check </p>
-        </div>
-    )
-};
-export default finishingUps;
+function FinishingUp() {
+  return (
+    <div>
+      <h1>Finishing up</h1>
+      <p>Double-check everything looks OK before confirming.</p>
+    </div>
+  );
+}
+
+export default FinishingUp;
