@@ -23,7 +23,11 @@ function App() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setCurrentStep(1)}
-                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+                  currentStep === 1
+                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
+                    : "border-white text-white"
+                }`}
               >
                 1
               </button>
@@ -36,7 +40,11 @@ function App() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setCurrentStep(2)}
-                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+                  currentStep === 2
+                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
+                    : "border-white text-white"
+                }`}
               >
                 2
               </button>
@@ -49,7 +57,11 @@ function App() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setCurrentStep(3)}
-                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+                  currentStep === 3
+                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
+                    : "border-white text-white"
+                }`}
               >
                 3
               </button>
@@ -62,7 +74,11 @@ function App() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setCurrentStep(4)}
-                className="w-9 h-9 rounded-full border border-white flex items-center justify-center text-white hover:bg-amber-50 hover:text-blue-800 cursor-pointer"
+                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+                  currentStep === 4
+                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
+                    : "border-white text-white"
+                }`}
               >
                 4
               </button>
@@ -75,17 +91,19 @@ function App() {
         </aside>
 
         <section className="flex-1 p-12">
-          {currentStep === 1 && <PersonalInfo />}
-          {currentStep === 2 && <SelectPlan />}
-          {currentStep === 3 && <AddOns />}
+          {currentStep === 1 && (
+            <PersonalInfo setCurrentStep={setCurrentStep} />
+          )}
+          {currentStep === 2 && <SelectPlan setCurrentStep={setCurrentStep} />}
+          {currentStep === 3 && <AddOns setCurrentStep={setCurrentStep} />}
           {currentStep === 4 && <FinishingUp />}
 
-          <button
+          {/* <button
             onClick={() => setCurrentStep(currentStep+1)}
             className="mt-8 bg-blue-900 text-white px-5 py-3 rounded-lg"
           >
             Confirm
-          </button>
+          </button> */}
         </section>
       </div>
     </main>
