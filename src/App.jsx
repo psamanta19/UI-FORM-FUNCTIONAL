@@ -8,7 +8,9 @@ import FinishingUp from "./components/finishingUp";
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
-
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   return (
     <main className="min-h-screen bg-amber-50 flex justify-center items-center p-4">
       <div className="w-full max-w-235 h-150 bg-white rounded-2xl p-3 flex">
@@ -90,20 +92,51 @@ function App() {
           </div>
         </aside>
 
-        <section className="flex-1 p-12">
-          {currentStep === 1 && (
-            <PersonalInfo setCurrentStep={setCurrentStep} />
-          )}
-          {currentStep === 2 && <SelectPlan setCurrentStep={setCurrentStep} />}
-          {currentStep === 3 && <AddOns setCurrentStep={setCurrentStep} />}
-          {currentStep === 4 && <FinishingUp />}
+        <section className="flex-1 flex flex-col">
+          <div className="flex-1">
+            {currentStep === 1 && (
+              <PersonalInfo
+                name={name}
+                setName={setName}
+                email={email}
+                setEmail={setEmail}
+                phone={phone}
+                setPhone={setPhone}
+              />
+            )}
 
-          {/* <button
-            onClick={() => setCurrentStep(currentStep+1)}
-            className="mt-8 bg-blue-900 text-white px-5 py-3 rounded-lg"
-          >
-            Confirm
-          </button> */}
+            {currentStep === 2 && <SelectPlan />}
+
+            {currentStep === 3 && <AddOns />}
+
+            {currentStep === 4 && <FinishingUp />}
+          </div>
+
+          <div className="flex justify-between items-center px-12 pb-8">
+            {currentStep > 1 ? (
+              <button
+                onClick={() => setCurrentStep(currentStep - 1)}
+                className="text-gray-500 font-medium cursor-pointer"
+              >
+                Go Back
+              </button>
+            ) : (
+              <div></div>
+            )}
+
+            {currentStep < 4 ? (
+              <button
+                onClick={() => setCurrentStep(currentStep + 1)}
+                className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
+              >
+                Next Step
+              </button>
+            ) : (
+              <button className="bg-indigo-500 text-white px-6 py-3 rounded-lg cursor-pointer">
+                Confirm
+              </button>
+            )}
+          </div>
         </section>
       </div>
     </main>
