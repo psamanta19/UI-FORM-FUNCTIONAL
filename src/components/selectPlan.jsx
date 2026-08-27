@@ -141,21 +141,6 @@ function SelectPlan({ setCurrentStep }) {
         </span>
       </div>
 
-      <div className="flex justify-between mt-12">
-        <button
-          onClick={() => setCurrentStep(1)}
-          className="text-gray-500 font-medium cursor-pointer"
-        >
-          Go Back
-        </button>
-
-        <button
-          onClick={() => setCurrentStep(3)}
-          className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
-        >
-          Next Step
-        </button>
-      </div>
     </div>
   );
 }
