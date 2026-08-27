@@ -5,7 +5,8 @@ function SelectPlan({setCurrentStep}) {
       <p>You have the option of monthly or yearly billing.</p>
       <button
         onClick={() => setCurrentStep(3)}
-        className="bg-blue-900 text-white px-6 py-3 rounded-lg cursor-pointer">
+        className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
+        >
         Next Step
       </button>
     </div>

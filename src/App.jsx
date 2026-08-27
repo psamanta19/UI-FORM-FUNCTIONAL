@@ -11,7 +11,7 @@ function App() {
 
   return (
     <main className="min-h-screen bg-amber-50 flex justify-center items-center p-4">
-      <div className="w-full max-w-235 bg-white rounded-2xl p-3 flex">
+      <div className="w-full max-w-235 h-150 bg-white rounded-2xl p-3 flex">
         <aside className="relative w-68.75 min-h-142.5 rounded-xl overflow-hidden">
           <img
             src={sidebarBg}
