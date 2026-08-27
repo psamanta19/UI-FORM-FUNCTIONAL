@@ -8,13 +8,40 @@ import FinishingUp from "./components/finishingUp";
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
+  const [showErrors, setShowErrors] = useState(false);
+
+  const handleNextStep = () => {
+    if (currentStep === 1) {
+      if (!name.trim() || !email.trim() || !phone.trim()) {
+        setShowErrors(true);
+        return;
+      }
+
+      setShowErrors(false);
+    }
+
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleGoBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-amber-50 flex justify-center items-center p-4">
       <div className="w-full max-w-235 h-150 bg-white rounded-2xl p-3 flex">
-        <aside className="relative w-68.75 min-h-142.5 rounded-xl overflow-hidden">
+
+        <aside className="relative w-68.75 h-full rounded-xl overflow-hidden">
+
           <img
             src={sidebarBg}
             alt=""
@@ -22,78 +49,90 @@ function App() {
           />
 
           <div className="relative z-10 p-8 space-y-8">
+
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setCurrentStep(1)}
-                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+              <div
+                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 1
-                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
-                    : "border-white text-white"
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 1
-              </button>
+              </div>
+
               <div>
                 <p className="text-white text-xs">STEP 1</p>
-                <p className="text-sm font-bold text-white">YOUR INFO</p>
+                <p className="text-sm font-bold text-white">
+                  YOUR INFO
+                </p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setCurrentStep(2)}
-                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+              <div
+                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 2
-                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
-                    : "border-white text-white"
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 2
-              </button>
+              </div>
+
               <div>
                 <p className="text-white text-xs">STEP 2</p>
-                <p className="text-sm font-bold text-white">SELECT PLAN</p>
+                <p className="text-sm font-bold text-white">
+                  SELECT PLAN
+                </p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setCurrentStep(3)}
-                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+              <div
+                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 3
-                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
-                    : "border-white text-white"
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 3
-              </button>
+              </div>
+
               <div>
                 <p className="text-white text-xs">STEP 3</p>
-                <p className="text-sm font-bold text-white">ADD-ONS</p>
+                <p className="text-sm font-bold text-white">
+                  ADD-ONS
+                </p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setCurrentStep(4)}
-                className={`w-9 h-9 rounded-full border flex items-center justify-center ${
+              <div
+                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 4
-                    ? "bg-[#bee2ff] text-[#12345b] border-[#bee2ff]"
-                    : "border-white text-white"
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 4
-              </button>
+              </div>
+
               <div>
                 <p className="text-white text-xs">STEP 4</p>
-                <p className="text-sm font-bold text-white">SUMMARY</p>
+                <p className="text-sm font-bold text-white">
+                  SUMMARY
+                </p>
               </div>
             </div>
+
           </div>
         </aside>
 
         <section className="flex-1 flex flex-col">
+
           <div className="flex-1">
+
             {currentStep === 1 && (
               <PersonalInfo
                 name={name}
@@ -102,20 +141,35 @@ function App() {
                 setEmail={setEmail}
                 phone={phone}
                 setPhone={setPhone}
+                showErrors={showErrors}
               />
             )}
 
-            {currentStep === 2 && <SelectPlan />}
+            {currentStep === 2 && (
+              <SelectPlan
+                setCurrentStep={setCurrentStep}
+              />
+            )}
 
-            {currentStep === 3 && <AddOns />}
+            {currentStep === 3 && (
+              <AddOns
+                setCurrentStep={setCurrentStep}
+              />
+            )}
 
-            {currentStep === 4 && <FinishingUp />}
+            {currentStep === 4 && (
+              <FinishingUp
+                setCurrentStep={setCurrentStep}
+              />
+            )}
+
           </div>
 
           <div className="flex justify-between items-center px-12 pb-8">
+
             {currentStep > 1 ? (
               <button
-                onClick={() => setCurrentStep(currentStep - 1)}
+                onClick={handleGoBack}
                 className="text-gray-500 font-medium cursor-pointer"
               >
                 Go Back
@@ -124,20 +178,27 @@ function App() {
               <div></div>
             )}
 
-            {currentStep < 4 ? (
+            {currentStep < 4 && (
               <button
-                onClick={() => setCurrentStep(currentStep + 1)}
+                onClick={handleNextStep}
                 className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
               >
                 Next Step
               </button>
-            ) : (
-              <button className="bg-indigo-500 text-white px-6 py-3 rounded-lg cursor-pointer">
+            )}
+
+            {currentStep === 4 && (
+              <button
+                className="bg-indigo-600 text-white px-7 py-3 rounded-lg cursor-pointer"
+              >
                 Confirm
               </button>
             )}
+
           </div>
+
         </section>
+
       </div>
     </main>
   );
