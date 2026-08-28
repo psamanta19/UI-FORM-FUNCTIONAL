@@ -14,10 +14,43 @@ function App() {
   const [phone, setPhone] = useState("");
 
   const [showErrors, setShowErrors] = useState(false);
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const handleNextStep = () => {
     if (currentStep === 1) {
-      if (!name.trim() || !email.trim() || !phone.trim()) {
+      let valid = true;
+
+      setNameError("");
+      setEmailError("");
+      setPhoneError("");
+
+      if (!name.trim()) {
+        setNameError("This field is required");
+        valid = false;
+      } else if (!/^[A-Za-z ]+$/.test(name.trim())) {
+        setNameError("Name can only contain letters");
+        valid = false;
+      }
+
+      if (!email.trim()) {
+        setEmailError("This field is required");
+        valid = false;
+      } else if (!/^[^\s@]+@gmail\.com$/.test(email.trim())) {
+        setEmailError("Enter a valid Gmail address");
+        valid = false;
+      }
+
+      if (!phone.trim()) {
+        setPhoneError("This field is required");
+        valid = false;
+      } else if (!/^\+?[0-9]+$/.test(phone.trim())) {
+        setPhoneError("Phone number can only contain numbers");
+        valid = false;
+      }
+
+      if (!valid) {
         setShowErrors(true);
         return;
       }
@@ -41,7 +74,6 @@ function App() {
       <div className="w-full max-w-235 h-150 bg-white rounded-2xl p-3 flex">
 
         <aside className="relative w-68.75 h-full rounded-xl overflow-hidden">
-
           <img
             src={sidebarBg}
             alt=""
@@ -63,9 +95,7 @@ function App() {
 
               <div>
                 <p className="text-white text-xs">STEP 1</p>
-                <p className="text-sm font-bold text-white">
-                  YOUR INFO
-                </p>
+                <p className="text-sm font-bold text-white">YOUR INFO</p>
               </div>
             </div>
 
@@ -142,6 +172,9 @@ function App() {
                 phone={phone}
                 setPhone={setPhone}
                 showErrors={showErrors}
+                nameError={nameError}
+                emailError={emailError}
+                phoneError={phoneError}
               />
             )}
 
@@ -198,7 +231,6 @@ function App() {
           </div>
 
         </section>
-
       </div>
     </main>
   );

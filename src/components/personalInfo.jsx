@@ -6,6 +6,9 @@ function PersonalInfo({
   phone,
   setPhone,
   showErrors,
+  nameError,
+  emailError,
+  phoneError,
 }) {
   return (
     <div className="p-12">
@@ -18,14 +21,15 @@ function PersonalInfo({
       </p>
 
       <div className="mt-8">
+
         <div className="flex justify-between mb-2">
           <label className="text-sm font-medium text-blue-950">
             Name
           </label>
 
-          {showErrors && !name.trim() && (
-            <span className="text-sm text-red-500">
-              This field is required
+          {showErrors && nameError && (
+            <span className="text-sm font-medium text-red-500">
+              {nameError}
             </span>
           )}
         </div>
@@ -36,48 +40,52 @@ function PersonalInfo({
           value={name}
           onChange={(e) => setName(e.target.value)}
           className={`w-full h-12 px-4 rounded-lg border outline-none ${
-            showErrors && !name.trim()
+            showErrors && nameError
               ? "border-red-500"
               : "border-gray-300 focus:border-indigo-500"
           }`}
         />
+
       </div>
 
       <div className="mt-5">
+
         <div className="flex justify-between mb-2">
           <label className="text-sm font-medium text-blue-950">
             Email Address
           </label>
 
-          {showErrors && !email.trim() && (
-            <span className="text-sm text-red-500">
-              This field is required
+          {showErrors && emailError && (
+            <span className="text-sm font-medium text-red-500">
+              {emailError}
             </span>
           )}
         </div>
 
         <input
           type="email"
-          placeholder="e.g. stephenking@lorem.com"
+          placeholder="e.g. stephenking@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className={`w-full h-12 px-4 rounded-lg border outline-none ${
-            showErrors && !email.trim()
+            showErrors && emailError
               ? "border-red-500"
               : "border-gray-300 focus:border-indigo-500"
           }`}
         />
+
       </div>
 
       <div className="mt-5">
+
         <div className="flex justify-between mb-2">
           <label className="text-sm font-medium text-blue-950">
             Phone Number
           </label>
 
-          {showErrors && !phone.trim() && (
-            <span className="text-sm text-red-500">
-              This field is required
+          {showErrors && phoneError && (
+            <span className="text-sm font-medium text-red-500">
+              {phoneError}
             </span>
           )}
         </div>
@@ -88,12 +96,14 @@ function PersonalInfo({
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           className={`w-full h-12 px-4 rounded-lg border outline-none ${
-            showErrors && !phone.trim()
+            showErrors && phoneError
               ? "border-red-500"
               : "border-gray-300 focus:border-indigo-500"
           }`}
         />
+
       </div>
+
     </div>
   );
 }
