@@ -1,5 +1,6 @@
 import { useState } from "react";
 import sidebarBg from "./assets/images/bg-sidebar-desktop.svg";
+import thankYouIcon from "./assets/images/icon-thank-you.svg";
 
 import PersonalInfo from "./components/personalInfo";
 import SelectPlan from "./components/selectPlan";
@@ -18,6 +19,8 @@ function App() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
   const handleNameChange = (value) => {
     setName(value);
     setNameError("");
@@ -32,6 +35,7 @@ function App() {
     setPhone(value);
     setPhoneError("");
   };
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -52,11 +56,10 @@ function App() {
       if (!email.trim()) {
         setEmailError("This field is required");
         valid = false;
-      } else if (!/^[^\s@]+@gmail\.com$/.test(email.trim())) {
-        setEmailError("Enter a valid Gmail address");
+      } else if (!emailRegex.test(email.trim())) {
+        setEmailError("Enter a valid email address");
         valid = false;
       }
-
       if (!phone.trim()) {
         setPhoneError("This field is required");
         valid = false;
@@ -98,9 +101,7 @@ function App() {
             <div className="flex items-center gap-4">
               <div
                 className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 1
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 1 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 1
@@ -115,9 +116,7 @@ function App() {
             <div className="flex items-center gap-4">
               <div
                 className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 2
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 2 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 2
@@ -125,18 +124,14 @@ function App() {
 
               <div>
                 <p className="text-white text-xs">STEP 2</p>
-                <p className="text-sm font-bold text-white">
-                  SELECT PLAN
-                </p>
+                <p className="text-sm font-bold text-white">SELECT PLAN</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
               <div
                 className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 3
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 3 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 3
@@ -144,18 +139,14 @@ function App() {
 
               <div>
                 <p className="text-white text-xs">STEP 3</p>
-                <p className="text-sm font-bold text-white">
-                  ADD-ONS
-                </p>
+                <p className="text-sm font-bold text-white">ADD-ONS</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
               <div
                 className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 4
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 4 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 4
@@ -163,74 +154,97 @@ function App() {
 
               <div>
                 <p className="text-white text-xs">STEP 4</p>
-                <p className="text-sm font-bold text-white">
-                  SUMMARY
-                </p>
+                <p className="text-sm font-bold text-white">SUMMARY</p>
               </div>
             </div>
           </div>
         </aside>
 
         <section className="flex-1 flex flex-col">
-          <div className="flex-1">
-            {currentStep === 1 && (
-              <PersonalInfo
-                name={name}
-                setName={handleNameChange}
-                email={email}
-                setEmail={handleEmailChange}
-                phone={phone}
-                setPhone={handlePhoneChange}
-                showErrors={showErrors}
-                nameError={nameError}
-                emailError={emailError}
-                phoneError={phoneError}
-              />
-            )}
+  {isConfirmed ? (
+    <div className="flex-1 flex items-center justify-center px-12">
+      <div className="text-center max-w-125">
+        <img
+          src={thankYouIcon}
+          alt=""
+          className="w-20 mx-auto mb-7"
+        />
 
-            {currentStep === 2 && (
-              <SelectPlan setCurrentStep={setCurrentStep} />
-            )}
+        <h1 className="text-3xl font-bold text-blue-950">
+          Thank you!
+        </h1>
 
-            {currentStep === 3 && (
-              <AddOns setCurrentStep={setCurrentStep} />
-            )}
+        <p className="text-gray-400 mt-3 leading-6">
+          Thanks for confirming your subscription! We hope you have
+          fun using our platform. If you ever need support, please feel
+          free to email us at support@loremgaming.com.
+        </p>
+      </div>
+    </div>
+  ) : (
+    <>
+      <div className="flex-1">
+        {currentStep === 1 && (
+          <PersonalInfo
+            name={name}
+            setName={handleNameChange}
+            email={email}
+            setEmail={handleEmailChange}
+            phone={phone}
+            setPhone={handlePhoneChange}
+            showErrors={showErrors}
+            nameError={nameError}
+            emailError={emailError}
+            phoneError={phoneError}
+          />
+        )}
 
-            {currentStep === 4 && (
-              <FinishingUp setCurrentStep={setCurrentStep} />
-            )}
-          </div>
+        {currentStep === 2 && (
+          <SelectPlan setCurrentStep={setCurrentStep} />
+        )}
 
-          <div className="flex justify-between items-center px-12 pb-8">
-            {currentStep > 1 ? (
-              <button
-                onClick={handleGoBack}
-                className="text-gray-500 font-medium cursor-pointer"
-              >
-                Go Back
-              </button>
-            ) : (
-              <div></div>
-            )}
+        {currentStep === 3 && (
+          <AddOns setCurrentStep={setCurrentStep} />
+        )}
 
-            {currentStep < 4 && (
-              <button
-                onClick={handleNextStep}
-                className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
-              >
-                Next Step
-              </button>
-            )}
+        {currentStep === 4 && (
+          <FinishingUp setCurrentStep={setCurrentStep} />
+        )}
+      </div>
 
-            {currentStep === 4 && (
-              <button
-                className="bg-indigo-600 text-white px-7 py-3 rounded-lg cursor-pointer"
-              >
-                Confirm
-              </button>
-            )}
-          </div>
-        </section>
+      <div className="flex justify-between items-center px-12 pb-8">
+        {currentStep > 1 ? (
+          <button
+            onClick={handleGoBack}
+            className="text-gray-500 font-medium cursor-pointer"
+          >
+            Go Back
+          </button>
+        ) : (
+          <div></div>
+        )}
+
+        {currentStep < 4 && (
+          <button
+            onClick={handleNextStep}
+            className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
+          >
+            Next Step
+          </button>
+        )}
+
+        {currentStep === 4 && (
+          <button
+            onClick={() => setIsConfirmed(true)}
+            className="bg-indigo-600 text-white px-7 py-3 rounded-lg cursor-pointer"
+          >
+            Confirm
+          </button>
+        )}
+      </div>
+    </>
+  )}
+</section>
       </div>
     </main>
   );
