@@ -18,6 +18,21 @@ function App() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  const handleNameChange = (value) => {
+    setName(value);
+    setNameError("");
+  };
+
+  const handleEmailChange = (value) => {
+    setEmail(value);
+    setEmailError("");
+  };
+
+  const handlePhoneChange = (value) => {
+    setPhone(value);
+    setPhoneError("");
+  };
+
   const handleNextStep = () => {
     if (currentStep === 1) {
       let valid = true;
@@ -72,7 +87,6 @@ function App() {
   return (
     <main className="min-h-screen bg-amber-50 flex justify-center items-center p-4">
       <div className="w-full max-w-235 h-150 bg-white rounded-2xl p-3 flex">
-
         <aside className="relative w-68.75 h-full rounded-xl overflow-hidden">
           <img
             src={sidebarBg}
@@ -81,7 +95,6 @@ function App() {
           />
 
           <div className="relative z-10 p-8 space-y-8">
-
             <div className="flex items-center gap-4">
               <div
                 className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
@@ -155,22 +168,19 @@ function App() {
                 </p>
               </div>
             </div>
-
           </div>
         </aside>
 
         <section className="flex-1 flex flex-col">
-
           <div className="flex-1">
-
             {currentStep === 1 && (
               <PersonalInfo
                 name={name}
-                setName={setName}
+                setName={handleNameChange}
                 email={email}
-                setEmail={setEmail}
+                setEmail={handleEmailChange}
                 phone={phone}
-                setPhone={setPhone}
+                setPhone={handlePhoneChange}
                 showErrors={showErrors}
                 nameError={nameError}
                 emailError={emailError}
@@ -179,27 +189,19 @@ function App() {
             )}
 
             {currentStep === 2 && (
-              <SelectPlan
-                setCurrentStep={setCurrentStep}
-              />
+              <SelectPlan setCurrentStep={setCurrentStep} />
             )}
 
             {currentStep === 3 && (
-              <AddOns
-                setCurrentStep={setCurrentStep}
-              />
+              <AddOns setCurrentStep={setCurrentStep} />
             )}
 
             {currentStep === 4 && (
-              <FinishingUp
-                setCurrentStep={setCurrentStep}
-              />
+              <FinishingUp setCurrentStep={setCurrentStep} />
             )}
-
           </div>
 
           <div className="flex justify-between items-center px-12 pb-8">
-
             {currentStep > 1 ? (
               <button
                 onClick={handleGoBack}
@@ -227,9 +229,7 @@ function App() {
                 Confirm
               </button>
             )}
-
           </div>
-
         </section>
       </div>
     </main>

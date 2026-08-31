@@ -21,7 +21,6 @@ function PersonalInfo({
       </p>
 
       <div className="mt-8">
-
         <div className="flex justify-between mb-2">
           <label className="text-sm font-medium text-blue-950">
             Name
@@ -45,11 +44,9 @@ function PersonalInfo({
               : "border-gray-300 focus:border-indigo-500"
           }`}
         />
-
       </div>
 
       <div className="mt-5">
-
         <div className="flex justify-between mb-2">
           <label className="text-sm font-medium text-blue-950">
             Email Address
@@ -73,11 +70,9 @@ function PersonalInfo({
               : "border-gray-300 focus:border-indigo-500"
           }`}
         />
-
       </div>
 
       <div className="mt-5">
-
         <div className="flex justify-between mb-2">
           <label className="text-sm font-medium text-blue-950">
             Phone Number
@@ -101,9 +96,7 @@ function PersonalInfo({
               : "border-gray-300 focus:border-indigo-500"
           }`}
         />
-
       </div>
-
     </div>
   );
 }
