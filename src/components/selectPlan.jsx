@@ -1,146 +1,134 @@
-import { useState } from "react";
 import arcadeIcon from "../assets/images/icon-arcade.svg";
 import advancedIcon from "../assets/images/icon-advanced.svg";
 import proIcon from "../assets/images/icon-pro.svg";
 
-function SelectPlan({ setCurrentStep }) {
-  const [selectedPlan, setSelectedPlan] = useState("Arcade");
-  const [isYearly, setIsYearly] = useState(false);
+function SelectPlan({
+  billing,
+  setBilling,
+  selectedPlan,
+  setSelectedPlan
+}) {
+  const plans = [
+    {
+      name: "Arcade",
+      monthly: 9,
+      yearly: 90,
+      icon: arcadeIcon
+    },
+    {
+      name: "Advanced",
+      monthly: 12,
+      yearly: 120,
+      icon: advancedIcon
+    },
+    {
+      name: "Pro",
+      monthly: 15,
+      yearly: 150,
+      icon: proIcon
+    }
+  ];
 
   return (
-    <div className="p-12">
-      <div>
-        <h1 className="text-3xl font-bold text-blue-950">
-          Select your plan
-        </h1>
+    <div className="px-6 py-8 md:px-12 md:pt-12">
 
-        <p className="text-gray-400 mt-2">
-          You have the option of monthly or yearly billing.
-        </p>
+      <h1 className="text-2xl md:text-3xl font-bold text-blue-950">
+        Select your plan
+      </h1>
+
+      <p className="text-gray-400 mt-2 leading-6">
+        You have the option of monthly or yearly billing.
+      </p>
+
+      <div className="grid md:grid-cols-3 gap-3 mt-6 md:mt-8">
+
+        {plans.map((plan) => {
+          const price =
+            billing === "monthly"
+              ? plan.monthly
+              : plan.yearly;
+
+          const selected = selectedPlan === plan.name;
+
+          return (
+            <button
+              key={plan.name}
+              type="button"
+              onClick={() => setSelectedPlan(plan.name)}
+              className={`text-left border rounded-lg p-4 md:h-[170px] ${
+                selected
+                  ? "border-indigo-500 bg-indigo-50"
+                  : "border-gray-300"
+              }`}
+            >
+              <img
+                src={plan.icon}
+                alt=""
+                className="w-10 h-10 mb-4"
+              />
+
+              <p className="font-bold text-blue-950">
+                {plan.name}
+              </p>
+
+              <p className="text-gray-400 text-sm">
+                ${price}/{billing === "monthly" ? "mo" : "yr"}
+              </p>
+
+              {billing === "yearly" && (
+                <p className="text-blue-950 text-xs mt-1">
+                  2 months free
+                </p>
+              )}
+            </button>
+          );
+        })}
+
       </div>
 
-      <div className="flex gap-4 mt-8">
-        <div
-          onClick={() => setSelectedPlan("Arcade")}
-          className={`flex-1 rounded-lg p-4 cursor-pointer border ${
-            selectedPlan === "Arcade"
-              ? "border-indigo-500 bg-indigo-50"
-              : "border-gray-300"
-          }`}
-        >
-          <img
-            src={arcadeIcon}
-            alt="Arcade"
-            className="w-10 h-10"
-          />
+      <div className="mt-6 bg-[#f7f8fc] rounded-lg p-3 flex justify-center items-center gap-4">
 
-          <h2 className="font-bold text-blue-950 mt-10">
-            Arcade
-          </h2>
-
-          <p className="text-gray-400 mt-1">
-            {isYearly ? "$90/yr" : "$9/mo"}
-          </p>
-
-          {isYearly && (
-            <p className="text-sm text-blue-950 mt-1">
-              2 months free
-            </p>
-          )}
-        </div>
-
-        <div
-          onClick={() => setSelectedPlan("Advanced")}
-          className={`flex-1 rounded-lg p-4 cursor-pointer border ${
-            selectedPlan === "Advanced"
-              ? "border-indigo-500 bg-indigo-50"
-              : "border-gray-300"
-          }`}
-        >
-          <img
-            src={advancedIcon}
-            alt="Advanced"
-            className="w-10 h-10"
-          />
-
-          <h2 className="font-bold text-blue-950 mt-10">
-            Advanced
-          </h2>
-
-          <p className="text-gray-400 mt-1">
-            {isYearly ? "$120/yr" : "$12/mo"}
-          </p>
-
-          {isYearly && (
-            <p className="text-sm text-blue-950 mt-1">
-              2 months free
-            </p>
-          )}
-        </div>
-
-        <div
-          onClick={() => setSelectedPlan("Pro")}
-          className={`flex-1 rounded-lg p-4 cursor-pointer border ${
-            selectedPlan === "Pro"
-              ? "border-indigo-500 bg-indigo-50"
-              : "border-gray-300"
-          }`}
-        >
-          <img
-            src={proIcon}
-            alt="Pro"
-            className="w-10 h-10"
-          />
-
-          <h2 className="font-bold text-blue-950 mt-10">
-            Pro
-          </h2>
-
-          <p className="text-gray-400 mt-1">
-            {isYearly ? "$150/yr" : "$15/mo"}
-          </p>
-
-          {isYearly && (
-            <p className="text-sm text-blue-950 mt-1">
-              2 months free
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex justify-center items-center gap-4 bg-gray-100 p-3 mt-8 rounded-lg">
         <span
-          className={
-            !isYearly
-              ? "font-bold text-blue-950"
+          className={`font-medium ${
+            billing === "monthly"
+              ? "text-blue-950"
               : "text-gray-400"
-          }
+          }`}
         >
           Monthly
         </span>
 
         <button
-          onClick={() => setIsYearly(!isYearly)}
-          className="w-12 h-6 bg-blue-950 rounded-full p-1 cursor-pointer flex items-center"
+          type="button"
+          onClick={() =>
+            setBilling(
+              billing === "monthly"
+                ? "yearly"
+                : "monthly"
+            )
+          }
+          className="w-10 h-5 bg-blue-950 rounded-full p-1 flex items-center"
         >
-          <div
-            className={`w-4 h-4 bg-white rounded-full transition-transform ${
-              isYearly ? "translate-x-6" : "translate-x-0"
+          <span
+            className={`w-3 h-3 bg-white rounded-full transition-transform ${
+              billing === "yearly"
+                ? "translate-x-5"
+                : ""
             }`}
-          ></div>
+          />
         </button>
 
         <span
-          className={
-            isYearly
-              ? "font-bold text-blue-950"
+          className={`font-medium ${
+            billing === "yearly"
+              ? "text-blue-950"
               : "text-gray-400"
-          }
+          }`}
         >
           Yearly
         </span>
-      </div>
 
+      </div>
     </div>
   );
 }

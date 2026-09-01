@@ -1,65 +1,133 @@
-function FinishingUp() {
+function FinishingUp({
+  billing,
+  selectedPlan,
+  selectedAddOns,
+  setCurrentStep
+}) {
+  const plans = {
+    Arcade: {
+      monthly: 9,
+      yearly: 90
+    },
+    Advanced: {
+      monthly: 12,
+      yearly: 120
+    },
+    Pro: {
+      monthly: 15,
+      yearly: 150
+    }
+  };
+
+  const addOns = {
+    "Online service": {
+      monthly: 1,
+      yearly: 10
+    },
+    "Larger storage": {
+      monthly: 2,
+      yearly: 20
+    },
+    "Customizable profile": {
+      monthly: 2,
+      yearly: 20
+    }
+  };
+
+  const isYearly = billing === "yearly";
+
+  const planPrice = isYearly
+    ? plans[selectedPlan].yearly
+    : plans[selectedPlan].monthly;
+
+  const addOnTotal = selectedAddOns.reduce(
+    (total, name) => {
+      return (
+        total +
+        (isYearly
+          ? addOns[name].yearly
+          : addOns[name].monthly)
+      );
+    },
+    0
+  );
+
+  const total = planPrice + addOnTotal;
+
   return (
-    <div className="p-12">
-      <div>
-        <h1 className="text-3xl font-bold text-blue-950">
-          Finishing up
-        </h1>
+    <div className="px-6 py-8 md:px-12 md:pt-12">
 
-        <p className="text-gray-400 mt-2">
-          Double-check everything looks OK before confirming.
-        </p>
-      </div>
+      <h1 className="text-2xl md:text-3xl font-bold text-blue-950">
+        Finishing up
+      </h1>
 
-      <div className="bg-gray-100 rounded-lg p-6 mt-8">
-        <div className="flex justify-between items-start">
+      <p className="text-gray-400 mt-2 leading-6">
+        Double-check everything looks OK before confirming.
+      </p>
+
+      <div className="mt-6 bg-[#f7f8fc] rounded-lg p-4">
+
+        <div className="flex justify-between items-center pb-4 border-b border-gray-300">
+
           <div>
-            <h2 className="font-bold text-blue-950">
-              Arcade (Monthly)
-            </h2>
+            <p className="font-bold text-blue-950 text-sm">
+              {selectedPlan} ({isYearly ? "Yearly" : "Monthly"})
+            </p>
 
-            <button className="text-indigo-600 underline cursor-pointer">
+            <button
+              type="button"
+              onClick={() => setCurrentStep(2)}
+              className="text-gray-400 underline text-sm cursor-pointer"
+            >
               Change
             </button>
           </div>
 
           <p className="font-bold text-blue-950">
-            $9/mo
+            ${planPrice}/{isYearly ? "yr" : "mo"}
           </p>
+
         </div>
 
-        <div className="border-t border-gray-300 my-4"></div>
+        <div className="mt-4 space-y-3">
 
-        <div className="flex justify-between">
-          <span className="text-gray-400">
-            Online service
-          </span>
+          {selectedAddOns.map((name) => {
+            const price = isYearly
+              ? addOns[name].yearly
+              : addOns[name].monthly;
 
-          <span className="text-gray-600">
-            +$1/mo
-          </span>
+            return (
+              <div
+                key={name}
+                className="flex justify-between text-sm"
+              >
+                <p className="text-gray-400">
+                  {name}
+                </p>
+
+                <p className="text-blue-950">
+                  +${price}/{isYearly ? "yr" : "mo"}
+                </p>
+              </div>
+            );
+          })}
+
         </div>
 
-        <div className="flex justify-between mt-3">
-          <span className="text-gray-400">
-            Larger storage
-          </span>
-
-          <span className="text-gray-600">
-            +$2/mo
-          </span>
-        </div>
       </div>
 
-      <div className="flex justify-between items-center mt-6 px-6">
-        <span className="text-gray-400">
-          Total (per month)
-        </span>
+      <div className="flex justify-between items-center px-4 mt-6">
 
-        <span className="text-2xl font-bold text-indigo-600">
-          $12/mo
-        </span>
+        <p className="text-gray-400 text-sm">
+          Total (per {isYearly ? "year" : "month"})
+        </p>
+
+        <p className="text-indigo-600 font-bold text-lg">
+          +${total}/{isYearly ? "yr" : "mo"}
+        </p>
+
       </div>
+
     </div>
   );
 }

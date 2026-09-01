@@ -1,120 +1,105 @@
-import { useState } from "react";
+function AddOns({
+  billing,
+  selectedAddOns,
+  setSelectedAddOns
+}) {
+  const addOns = [
+    {
+      name: "Online service",
+      description: "Access to multiplayer games",
+      monthly: 1,
+      yearly: 10
+    },
+    {
+      name: "Larger storage",
+      description: "Extra 1TB of cloud save",
+      monthly: 2,
+      yearly: 20
+    },
+    {
+      name: "Customizable profile",
+      description: "Custom theme on your profile",
+      monthly: 2,
+      yearly: 20
+    }
+  ];
 
-function AddOns({ setCurrentStep }) {
-  const [addOns, setAddOns] = useState([]);
+  const toggleAddOn = (name) => {
+    if (selectedAddOns.includes(name)) {
+      setSelectedAddOns(
+        selectedAddOns.filter((item) => item !== name)
+      );
+    } else {
+      setSelectedAddOns([...selectedAddOns, name]);
+    }
+  };
 
   return (
-    <div className="p-12">
-      <div>
-        <h1 className="text-3xl font-bold text-blue-950">
-          Pick add-ons
-        </h1>
+    <div className="px-6 py-8 md:px-12 md:pt-12">
 
-        <p className="text-gray-400 mt-2">
-          Add-ons help enhance your gaming experience.
-        </p>
+      <h1 className="text-2xl md:text-3xl font-bold text-blue-950">
+        Pick add-ons
+      </h1>
+
+      <p className="text-gray-400 mt-2 leading-6">
+        Add-ons help enhance your gaming experience.
+      </p>
+
+      <div className="mt-6 md:mt-8 space-y-3">
+
+        {addOns.map((addon) => {
+          const selected = selectedAddOns.includes(addon.name);
+
+          const price =
+            billing === "monthly"
+              ? addon.monthly
+              : addon.yearly;
+
+          return (
+            <button
+              key={addon.name}
+              type="button"
+              onClick={() => toggleAddOn(addon.name)}
+              className={`w-full flex items-center gap-4 text-left border rounded-lg p-4 ${
+                selected
+                  ? "border-indigo-500 bg-indigo-50"
+                  : "border-gray-300"
+              }`}
+            >
+
+              <div
+                className={`w-5 h-5 shrink-0 rounded border flex items-center justify-center ${
+                  selected
+                    ? "bg-indigo-600 border-indigo-600"
+                    : "border-gray-300"
+                }`}
+              >
+                {selected && (
+                  <span className="text-white text-xs">
+                    ✓
+                  </span>
+                )}
+              </div>
+
+              <div className="flex-1">
+                <p className="font-bold text-blue-950 text-sm">
+                  {addon.name}
+                </p>
+
+                <p className="text-gray-400 text-xs">
+                  {addon.description}
+                </p>
+              </div>
+
+              <p className="text-indigo-600 text-sm">
+                +${price}/{billing === "monthly" ? "mo" : "yr"}
+              </p>
+
+            </button>
+          );
+        })}
+
       </div>
-
-      <div className="mt-8">
-        <div className="flex items-center gap-4 border border-gray-300 rounded-lg p-4">
-          <input
-            type="checkbox"
-            checked={addOns.includes("Online service")}
-            onChange={() => {
-              if (addOns.includes("Online service")) {
-                setAddOns(
-                  addOns.filter((item) => item !== "Online service")
-                );
-              } else {
-                setAddOns([...addOns, "Online service"]);
-              }
-            }}
-            className="w-5 h-5"
-          />
-
-          <div className="flex-1">
-            <h2 className="font-bold text-blue-950">
-              Online service
-            </h2>
-
-            <p className="text-sm text-gray-400">
-              Access to multiplayer games
-            </p>
-          </div>
-
-          <span className="text-indigo-500">
-            +$1/mo
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4 border border-gray-300 rounded-lg p-4 mt-4">
-          <input
-            type="checkbox"
-            checked={addOns.includes("Larger storage")}
-            onChange={() => {
-              if (addOns.includes("Larger storage")) {
-                setAddOns(
-                  addOns.filter((item) => item !== "Larger storage")
-                );
-              } else {
-                setAddOns([...addOns, "Larger storage"]);
-              }
-            }}
-            className="w-5 h-5"
-          />
-
-          <div className="flex-1">
-            <h2 className="font-bold text-blue-950">
-              Larger storage
-            </h2>
-
-            <p className="text-sm text-gray-400">
-              Extra 1TB of cloud save
-            </p>
-          </div>
-
-          <span className="text-indigo-500">
-            +$2/mo
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4 border border-gray-300 rounded-lg p-4 mt-4">
-          <input
-            type="checkbox"
-            checked={addOns.includes("Customizable profile")}
-            onChange={() => {
-              if (addOns.includes("Customizable profile")) {
-                setAddOns(
-                  addOns.filter(
-                    (item) => item !== "Customizable profile"
-                  )
-                );
-              } else {
-                setAddOns([
-                  ...addOns,
-                  "Customizable profile",
-                ]);
-              }
-            }}
-            className="w-5 h-5"
-          />
-
-          <div className="flex-1">
-            <h2 className="font-bold text-blue-950">
-              Customizable profile
-            </h2>
-
-            <p className="text-sm text-gray-400">
-              Custom theme on your profile
-            </p>
-          </div>
-
-          <span className="text-indigo-500">
-            +$2/mo
-          </span>
-        </div>
-      </div>
-
     </div>
   );
 }

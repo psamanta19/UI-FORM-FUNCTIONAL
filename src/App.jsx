@@ -1,5 +1,6 @@
 import { useState } from "react";
 import sidebarBg from "./assets/images/bg-sidebar-desktop.svg";
+import sidebarMobileBg from "./assets/images/bg-sidebar-mobile.svg";
 import thankYouIcon from "./assets/images/icon-thank-you.svg";
 
 import PersonalInfo from "./components/personalInfo";
@@ -20,7 +21,15 @@ function App() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  const [billing, setBilling] = useState("monthly");
+  const [selectedPlan, setSelectedPlan] = useState("Arcade");
+
+  const [selectedAddOns, setSelectedAddOns] = useState([]);
+
   const [isConfirmed, setIsConfirmed] = useState(false);
+
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleNameChange = (value) => {
     setName(value);
@@ -36,9 +45,6 @@ function App() {
     setPhone(value);
     setPhoneError("");
   };
-
-  const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleNextStep = () => {
     if (currentStep === 1) {
@@ -117,17 +123,40 @@ function App() {
     }
   };
 
-  return (
-    <main className="min-h-screen bg-amber-50 flex justify-center items-center p-4">
-      <div className="w-full max-w-235 h-150 bg-white rounded-2xl p-3 flex">
-        <aside className="relative w-68.75 h-full rounded-xl overflow-hidden">
-          <img
-            src={sidebarBg}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+  const handleConfirm = () => {
+    setCompletedSteps((prev) => {
+      if (prev.includes(4)) {
+        return prev;
+      }
 
-          <div className="relative z-10 p-8 space-y-8">
+      return [...prev, 4];
+    });
+
+    setIsConfirmed(true);
+  };
+
+  return (
+    <main className="min-h-screen bg-[#eef5ff] md:flex md:items-center md:justify-center md:p-6">
+
+      <div className="relative w-full md:max-w-[940px] md:h-[600px] md:bg-white md:rounded-2xl md:p-3 md:flex">
+
+        <aside className="relative w-full h-[172px] md:w-[274px] md:h-full md:rounded-xl overflow-hidden">
+
+          <picture>
+            <source
+              media="(max-width: 767px)"
+              srcSet={sidebarMobileBg}
+            />
+
+            <img
+              src={sidebarBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </picture>
+
+          <div className="relative z-10 flex justify-center gap-4 pt-8 md:block md:p-8 md:space-y-8">
+
             <div
               onClick={() => handleStepClick(1)}
               className={`flex items-center gap-4 ${
@@ -137,7 +166,7 @@ function App() {
               }`}
             >
               <div
-                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
+                className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 1
                     ? "bg-white text-blue-950"
                     : "text-white"
@@ -146,7 +175,7 @@ function App() {
                 1
               </div>
 
-              <div>
+              <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 1</p>
                 <p className="text-sm font-bold text-white">
                   YOUR INFO
@@ -163,7 +192,7 @@ function App() {
               }`}
             >
               <div
-                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
+                className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 2
                     ? "bg-white text-blue-950"
                     : "text-white"
@@ -172,7 +201,7 @@ function App() {
                 2
               </div>
 
-              <div>
+              <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 2</p>
                 <p className="text-sm font-bold text-white">
                   SELECT PLAN
@@ -189,7 +218,7 @@ function App() {
               }`}
             >
               <div
-                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
+                className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 3
                     ? "bg-white text-blue-950"
                     : "text-white"
@@ -198,7 +227,7 @@ function App() {
                 3
               </div>
 
-              <div>
+              <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 3</p>
                 <p className="text-sm font-bold text-white">
                   ADD-ONS
@@ -215,7 +244,7 @@ function App() {
               }`}
             >
               <div
-                className={`w-9 h-9 rounded-full border border-white flex items-center justify-center ${
+                className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
                   currentStep === 4
                     ? "bg-white text-blue-950"
                     : "text-white"
@@ -224,27 +253,30 @@ function App() {
                 4
               </div>
 
-              <div>
+              <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 4</p>
                 <p className="text-sm font-bold text-white">
                   SUMMARY
                 </p>
               </div>
             </div>
+
           </div>
         </aside>
 
-        <section className="flex-1 flex flex-col">
+        <section className="relative z-20 -mt-[73px] mx-4 rounded-xl bg-white md:mt-0 md:mx-0 md:rounded-none md:bg-transparent md:flex-1 md:flex md:flex-col">
+
           {isConfirmed ? (
-            <div className="flex-1 flex items-center justify-center px-12">
-              <div className="text-center max-w-125">
+            <div className="min-h-[400px] md:h-full flex items-center justify-center px-6 py-12 md:px-12">
+              <div className="text-center max-w-[450px]">
+
                 <img
                   src={thankYouIcon}
                   alt=""
-                  className="w-20 mx-auto mb-7"
+                  className="w-14 md:w-20 mx-auto mb-6 md:mb-7"
                 />
 
-                <h1 className="text-3xl font-bold text-blue-950">
+                <h1 className="text-2xl md:text-3xl font-bold text-blue-950">
                   Thank you!
                 </h1>
 
@@ -254,11 +286,13 @@ function App() {
                   support, please feel free to email us at
                   support@loremgaming.com.
                 </p>
+
               </div>
             </div>
           ) : (
             <>
-              <div className="flex-1">
+              <div className="md:flex-1">
+
                 {currentStep === 1 && (
                   <PersonalInfo
                     name={name}
@@ -276,28 +310,38 @@ function App() {
 
                 {currentStep === 2 && (
                   <SelectPlan
-                    setCurrentStep={setCurrentStep}
+                    billing={billing}
+                    setBilling={setBilling}
+                    selectedPlan={selectedPlan}
+                    setSelectedPlan={setSelectedPlan}
                   />
                 )}
 
                 {currentStep === 3 && (
                   <AddOns
-                    setCurrentStep={setCurrentStep}
+                    billing={billing}
+                    selectedAddOns={selectedAddOns}
+                    setSelectedAddOns={setSelectedAddOns}
                   />
                 )}
 
                 {currentStep === 4 && (
                   <FinishingUp
+                    billing={billing}
+                    selectedPlan={selectedPlan}
+                    selectedAddOns={selectedAddOns}
                     setCurrentStep={setCurrentStep}
                   />
                 )}
+
               </div>
 
-              <div className="flex justify-between items-center px-12 pb-8">
+              <div className="flex justify-between items-center px-6 py-5 md:px-12 md:pb-8 md:pt-0">
+
                 {currentStep > 1 ? (
                   <button
                     onClick={handleGoBack}
-                    className="text-gray-500 font-medium cursor-pointer"
+                    className="text-gray-400 font-medium cursor-pointer hover:text-blue-950"
                   >
                     Go Back
                   </button>
@@ -308,7 +352,7 @@ function App() {
                 {currentStep < 4 && (
                   <button
                     onClick={handleNextStep}
-                    className="bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
+                    className="bg-blue-950 text-white px-5 py-3 rounded-lg cursor-pointer"
                   >
                     Next Step
                   </button>
@@ -316,15 +360,17 @@ function App() {
 
                 {currentStep === 4 && (
                   <button
-                    onClick={() => setIsConfirmed(true)}
-                    className="bg-indigo-600 text-white px-7 py-3 rounded-lg cursor-pointer"
+                    onClick={handleConfirm}
+                    className="bg-indigo-600 text-white px-6 py-3 rounded-lg cursor-pointer"
                   >
                     Confirm
                   </button>
                 )}
+
               </div>
             </>
           )}
+
         </section>
       </div>
     </main>

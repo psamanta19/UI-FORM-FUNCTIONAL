@@ -8,94 +8,99 @@ function PersonalInfo({
   showErrors,
   nameError,
   emailError,
-  phoneError,
+  phoneError
 }) {
   return (
-    <div className="p-12">
-      <h1 className="text-3xl font-bold text-blue-950">
+    <div className="px-6 py-8 md:px-12 md:pt-12">
+
+      <h1 className="text-2xl md:text-3xl font-bold text-blue-950">
         Personal info
       </h1>
 
-      <p className="text-gray-400 mt-2">
+      <p className="text-gray-400 mt-2 leading-6">
         Please provide your name, email address, and phone number.
       </p>
 
-      <div className="mt-8">
-        <div className="flex justify-between mb-2">
-          <label className="text-sm font-medium text-blue-950">
-            Name
-          </label>
+      <div className="mt-6 md:mt-8 space-y-5">
 
-          {showErrors && nameError && (
-            <span className="text-sm font-medium text-red-500">
-              {nameError}
-            </span>
-          )}
+        <div>
+          <div className="flex justify-between">
+            <label className="text-sm font-medium text-blue-950">
+              Name
+            </label>
+
+            {showErrors && nameError && (
+              <span className="text-xs font-medium text-red-500">
+                {nameError}
+              </span>
+            )}
+          </div>
+
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. Stephen King"
+            className={`w-full mt-2 px-4 py-3 border rounded-lg outline-none ${
+              showErrors && nameError
+                ? "border-red-500 bg-red-50"
+                : "border-gray-300 focus:border-indigo-500"
+            }`}
+          />
         </div>
 
-        <input
-          type="text"
-          placeholder="e.g. Stephen King"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className={`w-full h-12 px-4 rounded-lg border outline-none ${
-            showErrors && nameError
-              ? "border-red-500"
-              : "border-gray-300 focus:border-indigo-500"
-          }`}
-        />
-      </div>
+        <div>
+          <div className="flex justify-between">
+            <label className="text-sm font-medium text-blue-950">
+              Email Address
+            </label>
 
-      <div className="mt-5">
-        <div className="flex justify-between mb-2">
-          <label className="text-sm font-medium text-blue-950">
-            Email Address
-          </label>
+            {showErrors && emailError && (
+              <span className="text-xs font-medium text-red-500">
+                {emailError}
+              </span>
+            )}
+          </div>
 
-          {showErrors && emailError && (
-            <span className="text-sm font-medium text-red-500">
-              {emailError}
-            </span>
-          )}
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="e.g. stephenking@lorem.com"
+            className={`w-full mt-2 px-4 py-3 border rounded-lg outline-none ${
+              showErrors && emailError
+                ? "border-red-500 bg-red-50"
+                : "border-gray-300 focus:border-indigo-500"
+            }`}
+          />
         </div>
 
-        <input
-          type="email"
-          placeholder="e.g. stephenking@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={`w-full h-12 px-4 rounded-lg border outline-none ${
-            showErrors && emailError
-              ? "border-red-500"
-              : "border-gray-300 focus:border-indigo-500"
-          }`}
-        />
-      </div>
+        <div>
+          <div className="flex justify-between">
+            <label className="text-sm font-medium text-blue-950">
+              Phone Number
+            </label>
 
-      <div className="mt-5">
-        <div className="flex justify-between mb-2">
-          <label className="text-sm font-medium text-blue-950">
-            Phone Number
-          </label>
+            {showErrors && phoneError && (
+              <span className="text-xs font-medium text-red-500">
+                {phoneError}
+              </span>
+            )}
+          </div>
 
-          {showErrors && phoneError && (
-            <span className="text-sm font-medium text-red-500">
-              {phoneError}
-            </span>
-          )}
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="e.g. +1 234 567 890"
+            className={`w-full mt-2 px-4 py-3 border rounded-lg outline-none ${
+              showErrors && phoneError
+                ? "border-red-500 bg-red-50"
+                : "border-gray-300 focus:border-indigo-500"
+            }`}
+          />
         </div>
 
-        <input
-          type="tel"
-          placeholder="e.g. +1 234 567 890"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className={`w-full h-12 px-4 rounded-lg border outline-none ${
-            showErrors && phoneError
-              ? "border-red-500"
-              : "border-gray-300 focus:border-indigo-500"
-          }`}
-        />
       </div>
     </div>
   );
