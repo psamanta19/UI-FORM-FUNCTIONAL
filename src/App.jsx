@@ -28,8 +28,7 @@ function App() {
 
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleNameChange = (value) => {
     setName(value);
@@ -93,10 +92,7 @@ function App() {
         updatedSteps.push(currentStep);
       }
 
-      if (
-        currentStep < 4 &&
-        !updatedSteps.includes(currentStep + 1)
-      ) {
+      if (currentStep < 4 && !updatedSteps.includes(currentStep + 1)) {
         updatedSteps.push(currentStep + 1);
       }
 
@@ -115,10 +111,7 @@ function App() {
   };
 
   const handleStepClick = (step) => {
-    if (
-      step === currentStep ||
-      completedSteps.includes(step)
-    ) {
+    if (step === currentStep || completedSteps.includes(step)) {
       setCurrentStep(step);
     }
   };
@@ -137,16 +130,10 @@ function App() {
 
   return (
     <main className="min-h-screen bg-[#eef5ff] md:flex md:items-center md:justify-center md:p-6">
-
-      <div className="relative w-full md:max-w-[940px] md:h-[600px] md:bg-white md:rounded-2xl md:p-3 md:flex">
-
-        <aside className="relative w-full h-[172px] md:w-[274px] md:h-full md:rounded-xl overflow-hidden">
-
+      <div className="relative w-full md:max-w-235 md:h-150 md:bg-white md:rounded-2xl md:p-3 md:flex">
+        <aside className="relative w-full h-43 md:w-68.5 md:h-full md:rounded-xl overflow-hidden">
           <picture>
-            <source
-              media="(max-width: 767px)"
-              srcSet={sidebarMobileBg}
-            />
+            <source media="(max-width: 767px)" srcSet={sidebarMobileBg} />
 
             <img
               src={sidebarBg}
@@ -156,7 +143,6 @@ function App() {
           </picture>
 
           <div className="relative z-10 flex justify-center gap-4 pt-8 md:block md:p-8 md:space-y-8">
-
             <div
               onClick={() => handleStepClick(1)}
               className={`flex items-center gap-4 ${
@@ -167,9 +153,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 1
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 1 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 1
@@ -177,9 +161,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 1</p>
-                <p className="text-sm font-bold text-white">
-                  YOUR INFO
-                </p>
+                <p className="text-sm font-bold text-white">YOUR INFO</p>
               </div>
             </div>
 
@@ -193,9 +175,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 2
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 2 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 2
@@ -203,9 +183,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 2</p>
-                <p className="text-sm font-bold text-white">
-                  SELECT PLAN
-                </p>
+                <p className="text-sm font-bold text-white">SELECT PLAN</p>
               </div>
             </div>
 
@@ -219,9 +197,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 3
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 3 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 3
@@ -229,9 +205,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 3</p>
-                <p className="text-sm font-bold text-white">
-                  ADD-ONS
-                </p>
+                <p className="text-sm font-bold text-white">ADD-ONS</p>
               </div>
             </div>
 
@@ -245,9 +219,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 4
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 4 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 4
@@ -255,21 +227,16 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 4</p>
-                <p className="text-sm font-bold text-white">
-                  SUMMARY
-                </p>
+                <p className="text-sm font-bold text-white">SUMMARY</p>
               </div>
             </div>
-
           </div>
         </aside>
 
-        <section className="relative z-20 -mt-[73px] mx-4 rounded-xl bg-white md:mt-0 md:mx-0 md:rounded-none md:bg-transparent md:flex-1 md:flex md:flex-col">
-
+        <section className="relative z-20 -mt-18.25 mx-4 rounded-xl bg-white md:mt-0 md:mx-0 md:rounded-none md:bg-transparent md:flex-1 md:flex md:flex-col">
           {isConfirmed ? (
-            <div className="min-h-[400px] md:h-full flex items-center justify-center px-6 py-12 md:px-12">
-              <div className="text-center max-w-[450px]">
-
+            <div className="min-h-100 md:h-full flex items-center justify-center px-6 py-12 md:px-12">
+              <div className="text-center max-w-112.5">
                 <img
                   src={thankYouIcon}
                   alt=""
@@ -281,18 +248,15 @@ function App() {
                 </h1>
 
                 <p className="text-gray-400 mt-3 leading-6">
-                  Thanks for confirming your subscription! We hope
-                  you have fun using our platform. If you ever need
-                  support, please feel free to email us at
-                  support@loremgaming.com.
+                  Thanks for confirming your subscription! We hope you have fun
+                  using our platform. If you ever need support, please feel free
+                  to email us at support@loremgaming.com.
                 </p>
-
               </div>
             </div>
           ) : (
             <>
               <div className="md:flex-1">
-
                 {currentStep === 1 && (
                   <PersonalInfo
                     name={name}
@@ -333,15 +297,13 @@ function App() {
                     setCurrentStep={setCurrentStep}
                   />
                 )}
-
               </div>
 
               <div className="flex justify-between items-center px-6 py-5 md:px-12 md:pb-8 md:pt-0">
-
                 {currentStep > 1 ? (
                   <button
                     onClick={handleGoBack}
-                    className="text-gray-400 font-medium cursor-pointer hover:text-blue-950"
+                    className="text-white px-5 py-3 rounded-lg font-medium cursor-pointer hover:text-blue-200 bg-linear-to-r from-blue-500 to-purple-600"
                   >
                     Go Back
                   </button>
@@ -366,11 +328,9 @@ function App() {
                     Confirm
                   </button>
                 )}
-
               </div>
             </>
           )}
-
         </section>
       </div>
     </main>
