@@ -72,8 +72,8 @@ function App() {
       if (!phone.trim()) {
         setPhoneError("This field is required");
         valid = false;
-      } else if (!/^\+?[0-9]+$/.test(phone.trim())) {
-        setPhoneError("Phone number can only contain numbers");
+      } else if (!/^(\+91[0-9]{10}|[0-9]{10})$/.test(phone.trim())) {
+        setPhoneError("Enter a valid 10 digit phone number");
         valid = false;
       }
 
