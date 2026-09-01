@@ -77,7 +77,7 @@ function FinishingUp({
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="text-gray-400 underline text-sm cursor-pointer"
+              className="text-blue-700 hover:text-red-600 underline text-sm cursor-pointer"
             >
               Change
             </button>
