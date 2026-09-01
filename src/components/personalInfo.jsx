@@ -8,11 +8,10 @@ function PersonalInfo({
   showErrors,
   nameError,
   emailError,
-  phoneError
+  phoneError,
 }) {
   return (
     <div className="px-6 py-8 md:px-12 md:pt-12">
-
       <h1 className="text-2xl md:text-3xl font-bold text-blue-950">
         Personal info
       </h1>
@@ -22,12 +21,9 @@ function PersonalInfo({
       </p>
 
       <div className="mt-6 md:mt-8 space-y-5">
-
         <div>
           <div className="flex justify-between">
-            <label className="text-sm font-medium text-blue-950">
-              Name
-            </label>
+            <label className="text-sm font-medium text-blue-950">Name</label>
 
             {showErrors && nameError && (
               <span className="text-xs font-medium text-red-500">
@@ -91,8 +87,24 @@ function PersonalInfo({
           <input
             type="text"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="e.g. +1 234 567 890"
+            onChange={(e) => {
+              const value = e.target.value;
+
+              if (!/^\+?[0-9]*$/.test(value)) {
+                return;
+              }
+
+              if (value.startsWith("+")) {
+                if (value.length <= 13) {
+                  setPhone(value);
+                }
+              } else {
+                if (value.length <= 10) {
+                  setPhone(value);
+                }
+              }
+            }}
+            placeholder="e.g. +91 9876543210"
             className={`w-full mt-2 px-4 py-3 border rounded-lg outline-none ${
               showErrors && phoneError
                 ? "border-red-500 bg-red-50"
@@ -100,7 +112,6 @@ function PersonalInfo({
             }`}
           />
         </div>
-
       </div>
     </div>
   );
