@@ -9,28 +9,80 @@ import AddOns from "./components/addOns";
 import FinishingUp from "./components/finishingUp";
 
 function App() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState([]);
-  const [maxStepReached, setMaxStepReached] = useState(1);
+  const savedData = JSON.parse(localStorage.getItem("multiStepForm")) || {};
+
+  const [currentStep, setCurrentStep] = useState(
+    savedData.currentStep || 1
+  );
+
+  const [completedSteps, setCompletedSteps] = useState(
+    savedData.completedSteps || []
+  );
+
+  const [maxStepReached, setMaxStepReached] = useState(
+    savedData.maxStepReached || 1
+  );
+
   const [notFound, setNotFound] = useState(false);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState(savedData.name || "");
+  const [email, setEmail] = useState(savedData.email || "");
+  const [phone, setPhone] = useState(savedData.phone || "");
 
   const [showErrors, setShowErrors] = useState(false);
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
-  const [billing, setBilling] = useState("monthly");
-  const [selectedPlan, setSelectedPlan] = useState("");
+  const [billing, setBilling] = useState(
+    savedData.billing || "monthly"
+  );
 
-  const [selectedAddOns, setSelectedAddOns] = useState([]);
+  const [selectedPlan, setSelectedPlan] = useState(
+    savedData.selectedPlan || ""
+  );
 
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [selectedAddOns, setSelectedAddOns] = useState(
+    savedData.selectedAddOns || []
+  );
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [isConfirmed, setIsConfirmed] = useState(
+    savedData.isConfirmed || false
+  );
+
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  useEffect(() => {
+    const formData = {
+      currentStep,
+      completedSteps,
+      maxStepReached,
+      name,
+      email,
+      phone,
+      billing,
+      selectedPlan,
+      selectedAddOns,
+      isConfirmed
+    };
+
+    localStorage.setItem(
+      "multiStepForm",
+      JSON.stringify(formData)
+    );
+  }, [
+    currentStep,
+    completedSteps,
+    maxStepReached,
+    name,
+    email,
+    phone,
+    billing,
+    selectedPlan,
+    selectedAddOns,
+    isConfirmed
+  ]);
 
   const handleNameChange = (value) => {
     setName(value);
@@ -74,7 +126,9 @@ function App() {
       if (!phone.trim()) {
         setPhoneError("This field is required");
         valid = false;
-      } else if (!/^(\+91[0-9]{10}|[0-9]{10})$/.test(phone.trim())) {
+      } else if (
+        !/^(\+91[0-9]{10}|[0-9]{10})$/.test(phone.trim())
+      ) {
         setPhoneError("Enter a valid 10 digit phone number");
         valid = false;
       }
@@ -101,10 +155,10 @@ function App() {
     });
 
     if (currentStep < 4) {
-      setMaxStepReached((prev) => Math.max(prev, currentStep + 1));
-    }
+      setMaxStepReached((prev) =>
+        Math.max(prev, currentStep + 1)
+      );
 
-    if (currentStep < 4) {
       handleStepChange(currentStep + 1);
     }
   };
@@ -116,14 +170,18 @@ function App() {
   };
 
   const handleStepClick = (step) => {
-    if (isConfirmed){
+    if (isConfirmed) {
       return;
     }
+
     if (step <= maxStepReached) {
       handleStepChange(step);
     }
   };
+
   const handleSendAnotherResponse = () => {
+    localStorage.removeItem("multiStepForm");
+
     setName("");
     setEmail("");
     setPhone("");
@@ -160,6 +218,10 @@ function App() {
   };
 
   const handleStepChange = (step) => {
+    if (isConfirmed) {
+      return;
+    }
+
     setCurrentStep(step);
     setIsConfirmed(false);
     setNotFound(false);
@@ -170,7 +232,32 @@ function App() {
     const handleHashChange = () => {
       const hash = window.location.hash;
 
-      if (hash === "" || hash === "#page1") {
+      if (hash === "") {
+        if (savedData.isConfirmed && savedData.completedSteps?.includes(4)) {
+          setIsConfirmed(true);
+          setNotFound(false);
+          window.location.hash = "confirmation";
+          return;
+        }
+
+        const savedStep = savedData.currentStep || 1;
+
+        if (savedStep <= (savedData.maxStepReached || 1)) {
+          setCurrentStep(savedStep);
+          setIsConfirmed(false);
+          setNotFound(false);
+          window.location.hash = `page${savedStep}`;
+          return;
+        }
+
+        setCurrentStep(1);
+        setIsConfirmed(false);
+        setNotFound(false);
+        window.location.hash = "page1";
+        return;
+      }
+
+      if (hash === "#page1") {
         setCurrentStep(1);
         setIsConfirmed(false);
         setNotFound(false);
@@ -178,35 +265,38 @@ function App() {
       }
 
       if (hash === "#page2") {
-        if (maxStepReached >= 2) {
+        if (maxStepReached >= 2 && !isConfirmed) {
           setCurrentStep(2);
           setIsConfirmed(false);
           setNotFound(false);
-        } else {
-          window.location.hash = "page1";
+        } else if (!isConfirmed) {
+          window.location.hash = `page${maxStepReached}`;
         }
+
         return;
       }
 
       if (hash === "#page3") {
-        if (maxStepReached >= 3) {
+        if (maxStepReached >= 3 && !isConfirmed) {
           setCurrentStep(3);
           setIsConfirmed(false);
           setNotFound(false);
-        } else {
-          window.location.hash = "page1";
+        } else if (!isConfirmed) {
+          window.location.hash = `page${maxStepReached}`;
         }
+
         return;
       }
 
       if (hash === "#page4") {
-        if (maxStepReached >= 4) {
+        if (maxStepReached >= 4 && !isConfirmed) {
           setCurrentStep(4);
           setIsConfirmed(false);
           setNotFound(false);
-        } else {
-          window.location.hash = "page1";
+        } else if (!isConfirmed) {
+          window.location.hash = `page${maxStepReached}`;
         }
+
         return;
       }
 
@@ -217,6 +307,7 @@ function App() {
         } else {
           window.location.hash = `page${maxStepReached}`;
         }
+
         return;
       }
 
@@ -229,15 +320,20 @@ function App() {
     window.addEventListener("hashchange", handleHashChange);
 
     return () => {
-      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener(
+        "hashchange",
+        handleHashChange
+      );
     };
-  }, [maxStepReached, completedSteps]);
+  }, [maxStepReached, completedSteps, isConfirmed]);
 
   if (notFound) {
     return (
       <main className="min-h-screen bg-[#eef5ff] flex items-center justify-center p-6">
         <div className="text-center">
-          <h1 className="text-7xl font-bold text-blue-950">404</h1>
+          <h1 className="text-7xl font-bold text-blue-950">
+            404
+          </h1>
 
           <h2 className="text-2xl font-bold text-blue-950 mt-4">
             Page Not Found
@@ -249,9 +345,14 @@ function App() {
 
           <button
             onClick={() => {
+              localStorage.removeItem("multiStepForm");
+
               setNotFound(false);
               setCurrentStep(1);
               setIsConfirmed(false);
+              setCompletedSteps([]);
+              setMaxStepReached(1);
+
               window.location.hash = "page1";
             }}
             className="mt-6 bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
@@ -266,9 +367,16 @@ function App() {
   return (
     <main className="min-h-screen bg-[#eef5ff] md:flex md:items-center md:justify-center md:p-6">
       <div className="relative w-full md:max-w-235 md:h-150 md:bg-white md:rounded-2xl md:p-3 md:flex">
-        <aside className="relative w-full h-43 md:w-68.5 md:h-full md:rounded-xl overflow-hidden">
+        <aside
+          className={`relative w-full h-43 md:w-68.5 md:h-full md:rounded-xl overflow-hidden ${
+            isConfirmed ? "pointer-events-none" : ""
+          }`}
+        >
           <picture>
-            <source media="(max-width: 767px)" srcSet={sidebarMobileBg} />
+            <source
+              media="(max-width: 767px)"
+              srcSet={sidebarMobileBg}
+            />
 
             <img
               src={sidebarBg}
@@ -289,7 +397,9 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 1 ? "bg-white text-blue-950" : "text-white"
+                  currentStep === 1
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 1
@@ -297,7 +407,9 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 1</p>
-                <p className="text-sm font-bold text-white">YOUR INFO</p>
+                <p className="text-sm font-bold text-white">
+                  YOUR INFO
+                </p>
               </div>
             </div>
 
@@ -312,7 +424,9 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 2 ? "bg-white text-blue-950" : "text-white"
+                  currentStep === 2
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 2
@@ -320,7 +434,9 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 2</p>
-                <p className="text-sm font-bold text-white">SELECT PLAN</p>
+                <p className="text-sm font-bold text-white">
+                  SELECT PLAN
+                </p>
               </div>
             </div>
 
@@ -335,7 +451,9 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 3 ? "bg-white text-blue-950" : "text-white"
+                  currentStep === 3
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 3
@@ -343,7 +461,9 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 3</p>
-                <p className="text-sm font-bold text-white">ADD-ONS</p>
+                <p className="text-sm font-bold text-white">
+                  ADD-ONS
+                </p>
               </div>
             </div>
 
@@ -358,7 +478,9 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 4 ? "bg-white text-blue-950" : "text-white"
+                  currentStep === 4
+                    ? "bg-white text-blue-950"
+                    : "text-white"
                 }`}
               >
                 4
@@ -366,7 +488,9 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 4</p>
-                <p className="text-sm font-bold text-white">SUMMARY</p>
+                <p className="text-sm font-bold text-white">
+                  SUMMARY
+                </p>
               </div>
             </div>
           </div>
@@ -387,10 +511,12 @@ function App() {
                 </h1>
 
                 <p className="text-gray-400 mt-3 leading-6">
-                  Thanks for confirming your subscription! We hope you have fun
-                  using our platform. If you ever need support, please feel free
-                  to email us at support@loremgaming.com.
+                  Thanks for confirming your subscription! We hope
+                  you have fun using our platform. If you ever need
+                  support, please feel free to email us at
+                  support@loremgaming.com.
                 </p>
+
                 <button
                   onClick={handleSendAnotherResponse}
                   className="mt-6 bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
@@ -439,7 +565,7 @@ function App() {
                     billing={billing}
                     selectedPlan={selectedPlan}
                     selectedAddOns={selectedAddOns}
-                    setCurrentStep={setCurrentStep}
+                    setCurrentStep={handleStepChange}
                   />
                 )}
               </div>
