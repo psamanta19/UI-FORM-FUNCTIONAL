@@ -60,7 +60,7 @@ function AddOns({
               key={addon.name}
               type="button"
               onClick={() => toggleAddOn(addon.name)}
-              className={`w-full flex items-center gap-4 text-left border rounded-lg p-4 ${
+              className={`w-full flex cursor-pointer items-center gap-4 text-left border rounded-lg p-4 ${
                 selected
                   ? "border-indigo-500 bg-indigo-50"
                   : "border-gray-300"

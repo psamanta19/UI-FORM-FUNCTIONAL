@@ -574,7 +574,7 @@ function App() {
                 {currentStep > 1 ? (
                   <button
                     onClick={handleGoBack}
-                    className="text-white px-5 py-3 rounded-lg font-medium cursor-pointer hover:text-blue-200 bg-linear-to-r from-blue-500 to-purple-600"
+                    className="text-white px-3 py-1.5 rounded-lg font-medium cursor-pointer hover:text-blue-200 bg-linear-to-r from-blue-500 to-purple-600"
                   >
                     Go Back
                   </button>

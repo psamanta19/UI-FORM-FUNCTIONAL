@@ -55,7 +55,7 @@ function SelectPlan({
               key={plan.name}
               type="button"
               onClick={() => setSelectedPlan(plan.name)}
-              className={`text-left border rounded-lg p-4 md:h-42.5 ${
+              className={`text-left cursor-pointer border rounded-lg p-4 md:h-42.5 ${
                 selected
                   ? "border-indigo-500 bg-indigo-50"
                   : "border-gray-300"
