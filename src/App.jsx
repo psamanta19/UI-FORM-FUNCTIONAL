@@ -11,16 +11,14 @@ import FinishingUp from "./components/finishingUp";
 function App() {
   const savedData = JSON.parse(localStorage.getItem("multiStepForm")) || {};
 
-  const [currentStep, setCurrentStep] = useState(
-    savedData.currentStep || 1
-  );
+  const [currentStep, setCurrentStep] = useState(savedData.currentStep || 1);
 
   const [completedSteps, setCompletedSteps] = useState(
-    savedData.completedSteps || []
+    savedData.completedSteps || [],
   );
 
   const [maxStepReached, setMaxStepReached] = useState(
-    savedData.maxStepReached || 1
+    savedData.maxStepReached || 1,
   );
 
   const [notFound, setNotFound] = useState(false);
@@ -34,24 +32,21 @@ function App() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
-  const [billing, setBilling] = useState(
-    savedData.billing || "monthly"
-  );
+  const [billing, setBilling] = useState(savedData.billing || "monthly");
 
   const [selectedPlan, setSelectedPlan] = useState(
-    savedData.selectedPlan || ""
+    savedData.selectedPlan || "",
   );
 
   const [selectedAddOns, setSelectedAddOns] = useState(
-    savedData.selectedAddOns || []
+    savedData.selectedAddOns || [],
   );
 
   const [isConfirmed, setIsConfirmed] = useState(
-    savedData.isConfirmed || false
+    savedData.isConfirmed || false,
   );
 
-  const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   useEffect(() => {
     const formData = {
@@ -64,13 +59,10 @@ function App() {
       billing,
       selectedPlan,
       selectedAddOns,
-      isConfirmed
+      isConfirmed,
     };
 
-    localStorage.setItem(
-      "multiStepForm",
-      JSON.stringify(formData)
-    );
+    localStorage.setItem("multiStepForm", JSON.stringify(formData));
   }, [
     currentStep,
     completedSteps,
@@ -81,7 +73,7 @@ function App() {
     billing,
     selectedPlan,
     selectedAddOns,
-    isConfirmed
+    isConfirmed,
   ]);
 
   const handleNameChange = (value) => {
@@ -126,9 +118,7 @@ function App() {
       if (!phone.trim()) {
         setPhoneError("This field is required");
         valid = false;
-      } else if (
-        !/^(\+91[0-9]{10}|[0-9]{10})$/.test(phone.trim())
-      ) {
+      } else if (!/^(\+91[0-9]{10}|[0-9]{10})$/.test(phone.trim())) {
         setPhoneError("Enter a valid 10 digit phone number");
         valid = false;
       }
@@ -155,9 +145,7 @@ function App() {
     });
 
     if (currentStep < 4) {
-      setMaxStepReached((prev) =>
-        Math.max(prev, currentStep + 1)
-      );
+      setMaxStepReached((prev) => Math.max(prev, currentStep + 1));
 
       handleStepChange(currentStep + 1);
     }
@@ -230,7 +218,14 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
+      const pathname = window.location.pathname;
       const hash = window.location.hash;
+
+      if (pathname !== "/") {
+        setNotFound(true);
+        setIsConfirmed(false);
+        return;
+      }
 
       if (hash === "") {
         if (savedData.isConfirmed && savedData.completedSteps?.includes(4)) {
@@ -320,10 +315,7 @@ function App() {
     window.addEventListener("hashchange", handleHashChange);
 
     return () => {
-      window.removeEventListener(
-        "hashchange",
-        handleHashChange
-      );
+      window.removeEventListener("hashchange", handleHashChange);
     };
   }, [maxStepReached, completedSteps, isConfirmed]);
 
@@ -331,9 +323,7 @@ function App() {
     return (
       <main className="min-h-screen bg-[#eef5ff] flex items-center justify-center p-6">
         <div className="text-center">
-          <h1 className="text-7xl font-bold text-blue-950">
-            404
-          </h1>
+          <h1 className="text-7xl font-bold text-blue-950">404</h1>
 
           <h2 className="text-2xl font-bold text-blue-950 mt-4">
             Page Not Found
@@ -347,13 +337,7 @@ function App() {
             onClick={() => {
               localStorage.removeItem("multiStepForm");
 
-              setNotFound(false);
-              setCurrentStep(1);
-              setIsConfirmed(false);
-              setCompletedSteps([]);
-              setMaxStepReached(1);
-
-              window.location.hash = "page1";
+              window.location.href = "/#page1";
             }}
             className="mt-6 bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
           >
@@ -373,10 +357,7 @@ function App() {
           }`}
         >
           <picture>
-            <source
-              media="(max-width: 767px)"
-              srcSet={sidebarMobileBg}
-            />
+            <source media="(max-width: 767px)" srcSet={sidebarMobileBg} />
 
             <img
               src={sidebarBg}
@@ -397,9 +378,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 1
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 1 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 1
@@ -407,9 +386,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 1</p>
-                <p className="text-sm font-bold text-white">
-                  YOUR INFO
-                </p>
+                <p className="text-sm font-bold text-white">YOUR INFO</p>
               </div>
             </div>
 
@@ -424,9 +401,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 2
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 2 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 2
@@ -434,9 +409,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 2</p>
-                <p className="text-sm font-bold text-white">
-                  SELECT PLAN
-                </p>
+                <p className="text-sm font-bold text-white">SELECT PLAN</p>
               </div>
             </div>
 
@@ -451,9 +424,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 3
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 3 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 3
@@ -461,9 +432,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 3</p>
-                <p className="text-sm font-bold text-white">
-                  ADD-ONS
-                </p>
+                <p className="text-sm font-bold text-white">ADD-ONS</p>
               </div>
             </div>
 
@@ -478,9 +447,7 @@ function App() {
             >
               <div
                 className={`w-9 h-9 shrink-0 rounded-full border border-white flex items-center justify-center ${
-                  currentStep === 4
-                    ? "bg-white text-blue-950"
-                    : "text-white"
+                  currentStep === 4 ? "bg-white text-blue-950" : "text-white"
                 }`}
               >
                 4
@@ -488,9 +455,7 @@ function App() {
 
               <div className="hidden md:block">
                 <p className="text-white text-xs">STEP 4</p>
-                <p className="text-sm font-bold text-white">
-                  SUMMARY
-                </p>
+                <p className="text-sm font-bold text-white">SUMMARY</p>
               </div>
             </div>
           </div>
@@ -511,10 +476,9 @@ function App() {
                 </h1>
 
                 <p className="text-gray-400 mt-3 leading-6">
-                  Thanks for confirming your subscription! We hope
-                  you have fun using our platform. If you ever need
-                  support, please feel free to email us at
-                  support@loremgaming.com.
+                  Thanks for confirming your subscription! We hope you have fun
+                  using our platform. If you ever need support, please feel free
+                  to email us at support@loremgaming.com.
                 </p>
 
                 <button
