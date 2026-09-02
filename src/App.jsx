@@ -116,6 +116,9 @@ function App() {
   };
 
   const handleStepClick = (step) => {
+    if (isConfirmed){
+      return;
+    }
     if (step <= maxStepReached) {
       handleStepChange(step);
     }
@@ -278,7 +281,8 @@ function App() {
             <div
               onClick={() => handleStepClick(1)}
               className={`flex items-center gap-4 ${
-                completedSteps.includes(1) || currentStep === 1
+                !isConfirmed &&
+                (completedSteps.includes(1) || currentStep === 1)
                   ? "cursor-pointer"
                   : ""
               }`}
@@ -300,7 +304,8 @@ function App() {
             <div
               onClick={() => handleStepClick(2)}
               className={`flex items-center gap-4 ${
-                completedSteps.includes(2) || currentStep === 2
+                !isConfirmed &&
+                (completedSteps.includes(2) || currentStep === 2)
                   ? "cursor-pointer"
                   : ""
               }`}
@@ -322,7 +327,8 @@ function App() {
             <div
               onClick={() => handleStepClick(3)}
               className={`flex items-center gap-4 ${
-                completedSteps.includes(3) || currentStep === 3
+                !isConfirmed &&
+                (completedSteps.includes(3) || currentStep === 3)
                   ? "cursor-pointer"
                   : ""
               }`}
@@ -344,7 +350,8 @@ function App() {
             <div
               onClick={() => handleStepClick(4)}
               className={`flex items-center gap-4 ${
-                completedSteps.includes(4) || currentStep === 4
+                !isConfirmed &&
+                (completedSteps.includes(4) || currentStep === 4)
                   ? "cursor-pointer"
                   : ""
               }`}
