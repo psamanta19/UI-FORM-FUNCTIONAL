@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import sidebarBg from "./assets/images/bg-sidebar-desktop.svg";
 import sidebarMobileBg from "./assets/images/bg-sidebar-mobile.svg";
 import thankYouIcon from "./assets/images/icon-thank-you.svg";
@@ -11,6 +11,8 @@ import FinishingUp from "./components/finishingUp";
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState([]);
+  const [maxStepReached, setMaxStepReached] = useState(1);
+  const [notFound, setNotFound] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +24,7 @@ function App() {
   const [phoneError, setPhoneError] = useState("");
 
   const [billing, setBilling] = useState("monthly");
-  const [selectedPlan, setSelectedPlan] = useState("Arcade");
+  const [selectedPlan, setSelectedPlan] = useState("");
 
   const [selectedAddOns, setSelectedAddOns] = useState([]);
 
@@ -85,35 +87,60 @@ function App() {
       setShowErrors(false);
     }
 
+    if (currentStep === 2 && !selectedPlan) {
+      alert("Please select a plan before continuing.");
+      return;
+    }
+
     setCompletedSteps((prev) => {
-      const updatedSteps = [...prev];
-
-      if (!updatedSteps.includes(currentStep)) {
-        updatedSteps.push(currentStep);
+      if (prev.includes(currentStep)) {
+        return prev;
       }
 
-      if (currentStep < 4 && !updatedSteps.includes(currentStep + 1)) {
-        updatedSteps.push(currentStep + 1);
-      }
-
-      return updatedSteps;
+      return [...prev, currentStep];
     });
 
     if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
+      setMaxStepReached((prev) => Math.max(prev, currentStep + 1));
+    }
+
+    if (currentStep < 4) {
+      handleStepChange(currentStep + 1);
     }
   };
 
   const handleGoBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      handleStepChange(currentStep - 1);
     }
   };
 
   const handleStepClick = (step) => {
-    if (step === currentStep || completedSteps.includes(step)) {
-      setCurrentStep(step);
+    if (step <= maxStepReached) {
+      handleStepChange(step);
     }
+  };
+  const handleSendAnotherResponse = () => {
+    setName("");
+    setEmail("");
+    setPhone("");
+
+    setNameError("");
+    setEmailError("");
+    setPhoneError("");
+    setShowErrors(false);
+
+    setBilling("monthly");
+    setSelectedPlan("");
+    setSelectedAddOns([]);
+
+    setCompletedSteps([]);
+    setMaxStepReached(1);
+
+    setIsConfirmed(false);
+    setCurrentStep(1);
+
+    window.location.hash = "page1";
   };
 
   const handleConfirm = () => {
@@ -126,7 +153,112 @@ function App() {
     });
 
     setIsConfirmed(true);
+    window.location.hash = "confirmation";
   };
+
+  const handleStepChange = (step) => {
+    setCurrentStep(step);
+    setIsConfirmed(false);
+    setNotFound(false);
+    window.location.hash = `page${step}`;
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+
+      if (hash === "" || hash === "#page1") {
+        setCurrentStep(1);
+        setIsConfirmed(false);
+        setNotFound(false);
+        return;
+      }
+
+      if (hash === "#page2") {
+        if (maxStepReached >= 2) {
+          setCurrentStep(2);
+          setIsConfirmed(false);
+          setNotFound(false);
+        } else {
+          window.location.hash = "page1";
+        }
+        return;
+      }
+
+      if (hash === "#page3") {
+        if (maxStepReached >= 3) {
+          setCurrentStep(3);
+          setIsConfirmed(false);
+          setNotFound(false);
+        } else {
+          window.location.hash = "page1";
+        }
+        return;
+      }
+
+      if (hash === "#page4") {
+        if (maxStepReached >= 4) {
+          setCurrentStep(4);
+          setIsConfirmed(false);
+          setNotFound(false);
+        } else {
+          window.location.hash = "page1";
+        }
+        return;
+      }
+
+      if (hash === "#confirmation") {
+        if (completedSteps.includes(4)) {
+          setIsConfirmed(true);
+          setNotFound(false);
+        } else {
+          window.location.hash = `page${maxStepReached}`;
+        }
+        return;
+      }
+
+      setNotFound(true);
+      setIsConfirmed(false);
+    };
+
+    handleHashChange();
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, [maxStepReached, completedSteps]);
+
+  if (notFound) {
+    return (
+      <main className="min-h-screen bg-[#eef5ff] flex items-center justify-center p-6">
+        <div className="text-center">
+          <h1 className="text-7xl font-bold text-blue-950">404</h1>
+
+          <h2 className="text-2xl font-bold text-blue-950 mt-4">
+            Page Not Found
+          </h2>
+
+          <p className="text-gray-400 mt-2">
+            The page you are looking for does not exist.
+          </p>
+
+          <button
+            onClick={() => {
+              setNotFound(false);
+              setCurrentStep(1);
+              setIsConfirmed(false);
+              window.location.hash = "page1";
+            }}
+            className="mt-6 bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
+          >
+            Go to Home
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#eef5ff] md:flex md:items-center md:justify-center md:p-6">
@@ -252,6 +384,12 @@ function App() {
                   using our platform. If you ever need support, please feel free
                   to email us at support@loremgaming.com.
                 </p>
+                <button
+                  onClick={handleSendAnotherResponse}
+                  className="mt-6 bg-blue-950 text-white px-6 py-3 rounded-lg cursor-pointer"
+                >
+                  Send Another Response
+                </button>
               </div>
             </div>
           ) : (
